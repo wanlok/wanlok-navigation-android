@@ -27,13 +27,17 @@ public class A1Fragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
-        textView.setText("A1");
+        textView.setText(presenter.getName());
         button.setText("Next");
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Bundle bundle = new Bundle();
+                bundle.putString("dummy", "ABCD");
+                Fragment fragment = new A2Fragment();
+                fragment.setArguments(bundle);
                 BaseActivity baseActivity = (BaseActivity) getActivity();
-                baseActivity.open(new A2Fragment());
+                baseActivity.open(fragment, R.id.a);
             }
         });
     }

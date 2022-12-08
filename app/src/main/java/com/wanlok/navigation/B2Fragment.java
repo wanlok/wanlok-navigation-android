@@ -33,7 +33,7 @@ public class B2Fragment extends Fragment {
             @Override
             public void onClick(View view) {
                 BaseActivity baseActivity = (BaseActivity) getActivity();
-                baseActivity.open(new B3Fragment());
+                baseActivity.open(new B3Fragment(), R.id.b);
             }
         });
     }

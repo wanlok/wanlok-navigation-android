@@ -18,7 +18,7 @@ public class A2Fragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        presenter = new A2Presenter();
+        presenter = new A2Presenter(getArguments());
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_a2, null);
         textView = root.findViewById(R.id.textView);
         button = root.findViewById(R.id.button);
@@ -33,7 +33,7 @@ public class A2Fragment extends Fragment {
             @Override
             public void onClick(View view) {
                 BaseActivity baseActivity = (BaseActivity) getActivity();
-                baseActivity.open(new A3Fragment());
+                baseActivity.open(new A3Fragment(), R.id.a);
             }
         });
     }

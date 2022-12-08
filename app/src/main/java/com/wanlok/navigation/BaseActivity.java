@@ -1,7 +1,6 @@
 package com.wanlok.navigation;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
@@ -12,15 +11,14 @@ import androidx.fragment.app.FragmentTransaction;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
-import org.json.JSONObject;
-
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class BaseActivity extends AppCompatActivity implements NavigationBarView.OnItemSelectedListener {
     private static final String TAG = BaseActivity.class.getName();
     private BottomNavigationView bottomNavigationView;
+    private Map<Integer, ArrayList<Fragment>> navigationMap;
 
     @Override
     public void onBackPressed() {
@@ -36,37 +34,42 @@ public class BaseActivity extends AppCompatActivity implements NavigationBarView
         return super.onOptionsItemSelected(item);
     }
 
-    public void open(Fragment fragment) {
+    public void open(Fragment fragment, int itemId) {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.addToBackStack(null);
+        ArrayList<Fragment> fragments = navigationMap.get(itemId);
+        if (navigationMap.get(itemId) == null) {
+            fragments = new ArrayList();
+            navigationMap.put(itemId, fragments);
+        }
+        if (fragments.size() > 0) {
+            fragmentTransaction.addToBackStack(null);
+        }
+        fragments.add(fragment);
         fragmentTransaction.add(R.id.fragmentContainerView, fragment).commit();
     }
 
-    public void dummy() {
+    public Fragment getFirstFragment() {
+        Fragment fragment = new A1Fragment();
         Bundle bundle = new Bundle();
         bundle.putString("name", "Robert Wan");
         bundle.putDouble("dummy", 3.14);
-        Fragment fragment = new A1Fragment();
         fragment.setArguments(bundle);
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.add(R.id.fragmentContainerView, fragment).commit();
+        return fragment;
     }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.a) {
-            Bundle bundle = new Bundle();
-            bundle.putString("name", "Robert Wan");
-            bundle.putDouble("dummy", 3.14);
-            Fragment fragment = new A1Fragment();
-            fragment.setArguments(bundle);
-            open(fragment);
-        } else if (item.getItemId() == R.id.b) {
-            Fragment fragment = new B1Fragment();
-            open(fragment);
-        } else if (item.getItemId() == R.id.c) {
-            Fragment fragment = new C1Fragment();
-            open(fragment);
+        Fragment fragment = null;
+        int itemId = item.getItemId();
+        if (itemId == R.id.a) {
+            getFirstFragment();
+        } else if (itemId == R.id.b) {
+            fragment = new B1Fragment();
+        } else if (itemId == R.id.c) {
+            fragment = new C1Fragment();
+        }
+        if (fragment != null) {
+            open(fragment, itemId);
         }
         return true;
     }
@@ -76,8 +79,10 @@ public class BaseActivity extends AppCompatActivity implements NavigationBarView
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        setTitle("Navigation");
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setOnItemSelectedListener(this);
-        dummy();
+        navigationMap = new HashMap<>();
+        open(getFirstFragment(), R.id.a);
     }
 }
