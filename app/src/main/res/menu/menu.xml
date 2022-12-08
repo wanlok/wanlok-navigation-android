@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<item
+    android:id="@+id/a"
+    android:icon="@drawable/ic_android_black_24dp"
+    android:title="A"/>
+
+<item
+    android:id="@+id/b"
+    android:icon="@drawable/ic_android_black_24dp"
+    android:title="B"/>
+
+<item
+    android:id="@+id/c"
+    android:icon="@drawable/ic_android_black_24dp"
+    android:title="C"/>
+</menu>
