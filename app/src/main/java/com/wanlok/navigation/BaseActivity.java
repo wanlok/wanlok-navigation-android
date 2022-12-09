@@ -2,6 +2,8 @@ package com.wanlok.navigation;
 
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,11 +19,14 @@ import java.util.ArrayList;
 public class BaseActivity extends AppCompatActivity implements NavigationBarView.OnItemSelectedListener {
     private static final String TAG = BaseActivity.class.getName();
 
+    private View previousView;
+
     private BottomNavigationView bottomNavigationView;
 
     private ArrayList<Fragment> aFragments = new ArrayList<>();
     private ArrayList<Fragment> bFragments = new ArrayList<>();
     private ArrayList<Fragment> cFragments = new ArrayList<>();
+
     private ArrayList<Fragment> fragments = aFragments;
 
     @Override
@@ -57,9 +62,12 @@ public class BaseActivity extends AppCompatActivity implements NavigationBarView
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
-    public void open(Fragment fragment) {
-        fragments.add(fragment);
-        add(fragment);
+    public void open(Fragment fragment, View view) {
+        if (view != previousView) {
+            fragments.add(fragment);
+            add(fragment);
+        }
+        previousView = view;
     }
 
     private void clear() {
@@ -106,6 +114,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationBarView
         Bundle bundle = new Bundle();
         bundle.putString("name", "Robert Wan");
         bundle.putDouble("dummy", 3.14);
+
         a1Fragment.setArguments(bundle);
 
         aFragments.add(a1Fragment);

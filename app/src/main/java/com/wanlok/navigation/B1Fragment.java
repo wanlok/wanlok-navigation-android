@@ -27,7 +27,7 @@ public class B1Fragment extends Fragment {
             @Override
             public void onClick(View view) {
                 BaseActivity baseActivity = (BaseActivity) getActivity();
-                baseActivity.open(new B2Fragment());
+                baseActivity.open(new B2Fragment(), button);
             }
         });
         return root;

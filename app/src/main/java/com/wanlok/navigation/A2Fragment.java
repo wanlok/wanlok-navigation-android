@@ -25,7 +25,7 @@ public class A2Fragment extends BaseFragment {
             @Override
             public void onClick(View view) {
                 BaseActivity baseActivity = (BaseActivity) getActivity();
-                baseActivity.open(new A3Fragment());
+                baseActivity.open(new A3Fragment(), button);
             }
         });
         return root;

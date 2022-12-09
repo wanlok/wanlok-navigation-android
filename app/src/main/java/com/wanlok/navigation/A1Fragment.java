@@ -31,7 +31,7 @@ public class A1Fragment extends BaseFragment {
                 Fragment fragment = new A2Fragment();
                 fragment.setArguments(bundle);
                 BaseActivity baseActivity = (BaseActivity) getActivity();
-                baseActivity.open(fragment);
+                baseActivity.open(fragment, button);
             }
         });
         return root;
