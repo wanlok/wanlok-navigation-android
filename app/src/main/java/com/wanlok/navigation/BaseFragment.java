@@ -1,4 +1,9 @@
 package com.wanlok.navigation;
 
-public class BaseFragment {
+import androidx.fragment.app.Fragment;
+
+public class BaseFragment extends Fragment {
+    private static final String TAG = BaseFragment.class.getName();
+
+
 }

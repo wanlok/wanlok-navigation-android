@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 public class B3Fragment extends Fragment {
@@ -16,14 +15,10 @@ public class B3Fragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        presenter = new B3Presenter();
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_b3, null);
+        presenter = new B3Presenter();
         textView = root.findViewById(R.id.textView);
-        return root;
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         textView.setText("B3");
+        return root;
     }
 }

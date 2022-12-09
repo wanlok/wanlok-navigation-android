@@ -7,10 +7,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-
-public class A2Fragment extends Fragment {
+public class A2Fragment extends BaseFragment {
     private static final String TAG = A2Fragment.class.getName();
     private A2Presenter presenter;
     private TextView textView;
@@ -18,23 +15,19 @@ public class A2Fragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        presenter = new A2Presenter(getArguments());
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_a2, null);
+        presenter = new A2Presenter(getArguments());
         textView = root.findViewById(R.id.textView);
         button = root.findViewById(R.id.button);
-        return root;
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         textView.setText("A2");
         button.setText("Next");
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 BaseActivity baseActivity = (BaseActivity) getActivity();
-                baseActivity.open(new A3Fragment(), R.id.a);
+                baseActivity.open(new A3Fragment());
             }
         });
+        return root;
     }
 }
