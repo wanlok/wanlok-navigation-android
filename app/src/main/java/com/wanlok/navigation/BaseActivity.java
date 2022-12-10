@@ -1,6 +1,7 @@
 package com.wanlok.navigation;
 
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -13,58 +14,64 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class BaseActivity extends AppCompatActivity implements NavigationBarView.OnItemSelectedListener {
     private static final String TAG = BaseActivity.class.getName();
 
     private BottomNavigationView bottomNavigationView;
-
     private View previousView;
 
-    private ArrayList<BaseFragment> aFragments = new ArrayList<>();
-    private ArrayList<BaseFragment> bFragments = new ArrayList<>();
-    private ArrayList<BaseFragment> cFragments = new ArrayList<>();
+    private Map<Integer, ArrayList<BaseFragment>> map;
+    private int itemId;
 
-    private int itemId = R.id.a;
-    private ArrayList<BaseFragment> fragments = aFragments;
-
-    private BaseFragment init() {
+    public BaseActivity() {
         Bundle bundle = new Bundle();
         bundle.putString("name", "Robert Wan");
 
         A1Fragment a1Fragment = new A1Fragment();
         a1Fragment.setArguments(bundle);
-        B1Fragment b1Fragment = new B1Fragment();
-        C1Fragment c1Fragment = new C1Fragment();
 
+        ArrayList<BaseFragment> aFragments = new ArrayList<>();
         aFragments.add(a1Fragment);
-        bFragments.add(b1Fragment);
-        cFragments.add(c1Fragment);
 
-        return a1Fragment;
+        ArrayList<BaseFragment> bFragments = new ArrayList<>();
+        bFragments.add(new B1Fragment());
+
+        ArrayList<BaseFragment> cFragments = new ArrayList<>();
+        cFragments.add(new C1Fragment());
+
+        map = new HashMap<>();
+        map.put(R.id.a, aFragments);
+        map.put(R.id.b, bFragments);
+        map.put(R.id.c, cFragments);
+
+        itemId = R.id.b;
     }
-
-    private void updateFragment(int itemId) {
-        if (itemId == R.id.a) {
-            fragments = aFragments;
-        } else if (itemId == R.id.b) {
-            fragments = bFragments;
-        } else if (itemId == R.id.c) {
-            fragments = cFragments;
-        }
-    }
-
-    // No need to change the code below
 
     private void updateTopNavigation(boolean backButtonEnabled) {
+        ArrayList<BaseFragment> fragments = map.get(itemId);
         if (fragments.size() > 0) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(backButtonEnabled);
             setTitle(fragments.get(fragments.size() - 1).getTitle());
         }
     }
 
+    private void updateBottomNavigation() {
+        Menu menu = bottomNavigationView.getMenu();
+        for (int i = 0; i < menu.size(); i++) {
+            MenuItem menuItem = menu.getItem(i);
+            if (menuItem.getItemId() == itemId) {
+                onNavigationItemSelected(menuItem);
+                menuItem.setChecked(true);
+            }
+        }
+    }
+
     @Override
     public void onBackPressed() {
+        ArrayList<BaseFragment> fragments = map.get(itemId);
         fragments.remove(fragments.get(fragments.size() - 1));
         previousView = null;
         updateTopNavigation(fragments.size() > 1);
@@ -99,34 +106,41 @@ public class BaseActivity extends AppCompatActivity implements NavigationBarView
 
     public void open(BaseFragment fragment, View view) {
         if (view != previousView) {
+            ArrayList<BaseFragment> fragments = map.get(itemId);
             fragments.add(fragment);
             add(fragment);
         }
         previousView = view;
     }
 
-    private void clearFragmentStack() {
+    private void clearStack() {
+        ArrayList<BaseFragment> fragments = map.get(itemId);
         FragmentManager fragmentManager = getSupportFragmentManager();
         for (int i = 0; i < fragments.size(); i++) {
             fragmentManager.popBackStack();
         }
     }
 
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        int itemId = item.getItemId();
-        if (itemId != this.itemId) {
-            clearFragmentStack();
-            updateFragment(item.getItemId());
-            for (int i = 0; i < fragments.size(); i++) {
-                if (i == 0) {
-                    replace(fragments.get(i));
-                } else {
-                    add(fragments.get(i));
-                }
+    private void buildStack() {
+        ArrayList<BaseFragment> fragments = map.get(itemId);
+        for (int i = 0; i < fragments.size(); i++) {
+            if (i == 0) {
+                replace(fragments.get(i));
+            } else {
+                add(fragments.get(i));
             }
         }
-        this.itemId = itemId;
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        int itemId = item.getItemId();
+        if (fragmentManager.getFragments().size() == 0 || itemId != this.itemId) {
+            this.itemId = itemId;
+            clearStack();
+            buildStack();
+        }
         return true;
     }
 
@@ -138,6 +152,6 @@ public class BaseActivity extends AppCompatActivity implements NavigationBarView
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setOnItemSelectedListener(this);
 
-        replace(init());
+        updateBottomNavigation();
     }
 }
