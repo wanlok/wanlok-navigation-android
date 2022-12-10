@@ -8,10 +8,15 @@ import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
-public class C3Fragment extends Fragment {
+public class C3Fragment extends BaseFragment {
     private static final String TAG = C3Fragment.class.getName();
     private C3Presenter presenter;
     private TextView textView;
+
+    @Override
+    public String getTitle() {
+        return "C3";
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

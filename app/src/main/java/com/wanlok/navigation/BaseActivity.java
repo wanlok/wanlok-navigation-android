@@ -3,11 +3,9 @@ package com.wanlok.navigation;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -23,16 +21,31 @@ public class BaseActivity extends AppCompatActivity implements NavigationBarView
 
     private BottomNavigationView bottomNavigationView;
 
-    private ArrayList<Fragment> aFragments = new ArrayList<>();
-    private ArrayList<Fragment> bFragments = new ArrayList<>();
-    private ArrayList<Fragment> cFragments = new ArrayList<>();
+    private ArrayList<BaseFragment> aFragments = new ArrayList<>();
+    private ArrayList<BaseFragment> bFragments = new ArrayList<>();
+    private ArrayList<BaseFragment> cFragments = new ArrayList<>();
 
-    private ArrayList<Fragment> fragments = aFragments;
+    private ArrayList<BaseFragment> fragments = aFragments;
+
+    private void updateFragment(int itemId) {
+        if (itemId == R.id.a) {
+            fragments = aFragments;
+        } else if (itemId == R.id.b) {
+            fragments = bFragments;
+        } else if (itemId == R.id.c) {
+            fragments = cFragments;
+        }
+    }
+
+    private void updateTopNavigation(boolean backButtonEnabled) {
+        getSupportActionBar().setDisplayHomeAsUpEnabled(backButtonEnabled);
+        setTitle(fragments.get(fragments.size() - 1).getTitle());
+    }
 
     @Override
     public void onBackPressed() {
         fragments.remove(fragments.get(fragments.size() - 1));
-        getSupportActionBar().setDisplayHomeAsUpEnabled(fragments.size() > 1);
+        updateTopNavigation(fragments.size() > 1);
         super.onBackPressed();
     }
 
@@ -45,24 +58,24 @@ public class BaseActivity extends AppCompatActivity implements NavigationBarView
         return super.onOptionsItemSelected(item);
     }
 
-    private void replace(Fragment fragment) {
+    private void replace(BaseFragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.fragmentContainerView, fragment);
         fragmentTransaction.commit();
-        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        updateTopNavigation(false);
     }
 
-    private void add(Fragment fragment) {
+    private void add(BaseFragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.add(R.id.fragmentContainerView, fragment);
         fragmentTransaction.commit();
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        updateTopNavigation(true);
     }
 
-    public void open(Fragment fragment, View view) {
+    public void open(BaseFragment fragment, View view) {
         if (view != previousView) {
             fragments.add(fragment);
             add(fragment);
@@ -80,14 +93,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationBarView
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         clear();
-        int itemId = item.getItemId();
-        if (itemId == R.id.a) {
-            fragments = aFragments;
-        } else if (itemId == R.id.b) {
-            fragments = bFragments;
-        } else if (itemId == R.id.c) {
-            fragments = cFragments;
-        }
+        updateFragment(item.getItemId());
         for (int i = 0; i < fragments.size(); i++) {
             if (i == 0) {
                 replace(fragments.get(i));
@@ -102,7 +108,6 @@ public class BaseActivity extends AppCompatActivity implements NavigationBarView
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        setTitle("Navigation");
 
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setOnItemSelectedListener(this);

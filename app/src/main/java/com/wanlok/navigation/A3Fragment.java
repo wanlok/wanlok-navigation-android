@@ -12,6 +12,11 @@ public class A3Fragment extends BaseFragment {
     private TextView textView;
 
     @Override
+    public String getTitle() {
+        return "A3";
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_a3, null);
         presenter = new A3Presenter();

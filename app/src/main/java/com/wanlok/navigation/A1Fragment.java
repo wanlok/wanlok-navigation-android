@@ -16,6 +16,11 @@ public class A1Fragment extends BaseFragment {
     private Button button;
 
     @Override
+    public String getTitle() {
+        return "A1";
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_a1, null);
         presenter = new A1Presenter(getArguments());
@@ -28,7 +33,7 @@ public class A1Fragment extends BaseFragment {
             public void onClick(View view) {
                 Bundle bundle = new Bundle();
                 bundle.putString("dummy", "ABCD");
-                Fragment fragment = new A2Fragment();
+                BaseFragment fragment = new A2Fragment();
                 fragment.setArguments(bundle);
                 BaseActivity baseActivity = (BaseActivity) getActivity();
                 baseActivity.open(fragment, button);

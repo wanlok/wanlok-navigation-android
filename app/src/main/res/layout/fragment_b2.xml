@@ -8,7 +8,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_centerInParent="true">
+        android:layout_centerInParent="true"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp">
 
         <EditText
             android:id="@+id/editText"

@@ -14,6 +14,11 @@ public class A2Fragment extends BaseFragment {
     private Button button;
 
     @Override
+    public String getTitle() {
+        return "A2";
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_a2, null);
         presenter = new A2Presenter(getArguments());

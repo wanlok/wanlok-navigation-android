@@ -9,11 +9,16 @@ import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
-public class C2Fragment extends Fragment {
+public class C2Fragment extends BaseFragment {
     private static final String TAG = C2Fragment.class.getName();
     private C2Presenter presenter;
     private TextView textView;
     private Button button;
+
+    @Override
+    public String getTitle() {
+        return "C2";
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
