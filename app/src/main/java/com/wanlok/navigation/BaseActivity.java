@@ -17,15 +17,32 @@ import java.util.ArrayList;
 public class BaseActivity extends AppCompatActivity implements NavigationBarView.OnItemSelectedListener {
     private static final String TAG = BaseActivity.class.getName();
 
-    private View previousView;
-
     private BottomNavigationView bottomNavigationView;
+
+    private View previousView;
 
     private ArrayList<BaseFragment> aFragments = new ArrayList<>();
     private ArrayList<BaseFragment> bFragments = new ArrayList<>();
     private ArrayList<BaseFragment> cFragments = new ArrayList<>();
 
+    private int itemId = R.id.a;
     private ArrayList<BaseFragment> fragments = aFragments;
+
+    private BaseFragment init() {
+        Bundle bundle = new Bundle();
+        bundle.putString("name", "Robert Wan");
+
+        A1Fragment a1Fragment = new A1Fragment();
+        a1Fragment.setArguments(bundle);
+        B1Fragment b1Fragment = new B1Fragment();
+        C1Fragment c1Fragment = new C1Fragment();
+
+        aFragments.add(a1Fragment);
+        bFragments.add(b1Fragment);
+        cFragments.add(c1Fragment);
+
+        return a1Fragment;
+    }
 
     private void updateFragment(int itemId) {
         if (itemId == R.id.a) {
@@ -36,6 +53,8 @@ public class BaseActivity extends AppCompatActivity implements NavigationBarView
             fragments = cFragments;
         }
     }
+
+    // No need to change the code below
 
     private void updateTopNavigation(boolean backButtonEnabled) {
         if (fragments.size() > 0) {
@@ -86,7 +105,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationBarView
         previousView = view;
     }
 
-    private void clear() {
+    private void clearFragmentStack() {
         FragmentManager fragmentManager = getSupportFragmentManager();
         for (int i = 0; i < fragments.size(); i++) {
             fragmentManager.popBackStack();
@@ -95,15 +114,19 @@ public class BaseActivity extends AppCompatActivity implements NavigationBarView
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        clear();
-        updateFragment(item.getItemId());
-        for (int i = 0; i < fragments.size(); i++) {
-            if (i == 0) {
-                replace(fragments.get(i));
-            } else {
-                add(fragments.get(i));
+        int itemId = item.getItemId();
+        if (itemId != this.itemId) {
+            clearFragmentStack();
+            updateFragment(item.getItemId());
+            for (int i = 0; i < fragments.size(); i++) {
+                if (i == 0) {
+                    replace(fragments.get(i));
+                } else {
+                    add(fragments.get(i));
+                }
             }
         }
+        this.itemId = itemId;
         return true;
     }
 
@@ -115,20 +138,6 @@ public class BaseActivity extends AppCompatActivity implements NavigationBarView
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setOnItemSelectedListener(this);
 
-        A1Fragment a1Fragment = new A1Fragment();
-        B1Fragment b1Fragment = new B1Fragment();
-        C1Fragment c1Fragment = new C1Fragment();
-
-        Bundle bundle = new Bundle();
-        bundle.putString("name", "Robert Wan");
-        bundle.putDouble("dummy", 3.14);
-
-        a1Fragment.setArguments(bundle);
-
-        aFragments.add(a1Fragment);
-        bFragments.add(b1Fragment);
-        cFragments.add(c1Fragment);
-
-        replace(a1Fragment);
+        replace(init());
     }
 }

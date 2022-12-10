@@ -24,7 +24,8 @@ public class B3Fragment extends BaseFragment {
 
         textView = root.findViewById(R.id.textView);
 
-        textView.setText(presenter.getHello());
+        String text = presenter.getHello();
+        textView.setText(text != null && text.length() > 0 ? text : "B3");
 
         return root;
     }
