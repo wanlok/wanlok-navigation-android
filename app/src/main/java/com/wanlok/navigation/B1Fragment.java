@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class B1Fragment extends BaseFragment {
+public class B1Fragment extends NavigationFragment {
     private static final String TAG = B1Fragment.class.getName();
     private B1Presenter presenter;
     private TextView textView;

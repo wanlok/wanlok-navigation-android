@@ -6,7 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-public class A3Fragment extends BaseFragment {
+public class A3Fragment extends NavigationFragment {
     private static final String TAG = A3Fragment.class.getName();
     private A3Presenter presenter;
     private TextView textView;

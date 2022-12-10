@@ -17,29 +17,29 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class BaseActivity extends AppCompatActivity implements NavigationBarView.OnItemSelectedListener {
-    private static final String TAG = BaseActivity.class.getName();
+public class NavigationActivity extends AppCompatActivity implements NavigationBarView.OnItemSelectedListener {
+    private static final String TAG = NavigationActivity.class.getName();
 
     private BottomNavigationView bottomNavigationView;
     private View previousView;
 
-    private Map<Integer, ArrayList<BaseFragment>> map;
+    private Map<Integer, ArrayList<NavigationFragment>> map;
     private int itemId;
 
-    public BaseActivity() {
+    public NavigationActivity() {
         Bundle bundle = new Bundle();
         bundle.putString("name", "Robert Wan");
 
         A1Fragment a1Fragment = new A1Fragment();
         a1Fragment.setArguments(bundle);
 
-        ArrayList<BaseFragment> aFragments = new ArrayList<>();
+        ArrayList<NavigationFragment> aFragments = new ArrayList<>();
         aFragments.add(a1Fragment);
 
-        ArrayList<BaseFragment> bFragments = new ArrayList<>();
+        ArrayList<NavigationFragment> bFragments = new ArrayList<>();
         bFragments.add(new B1Fragment());
 
-        ArrayList<BaseFragment> cFragments = new ArrayList<>();
+        ArrayList<NavigationFragment> cFragments = new ArrayList<>();
         cFragments.add(new C1Fragment());
 
         map = new HashMap<>();
@@ -51,7 +51,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationBarView
     }
 
     private void updateTopNavigation(boolean backButtonEnabled) {
-        ArrayList<BaseFragment> fragments = map.get(itemId);
+        ArrayList<NavigationFragment> fragments = map.get(itemId);
         if (fragments.size() > 0) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(backButtonEnabled);
             setTitle(fragments.get(fragments.size() - 1).getTitle());
@@ -71,7 +71,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationBarView
 
     @Override
     public void onBackPressed() {
-        ArrayList<BaseFragment> fragments = map.get(itemId);
+        ArrayList<NavigationFragment> fragments = map.get(itemId);
         fragments.remove(fragments.get(fragments.size() - 1));
         previousView = null;
         updateTopNavigation(fragments.size() > 1);
@@ -87,7 +87,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationBarView
         return super.onOptionsItemSelected(item);
     }
 
-    private void replace(BaseFragment fragment) {
+    private void replace(NavigationFragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.fragmentContainerView, fragment);
@@ -95,7 +95,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationBarView
         updateTopNavigation(false);
     }
 
-    private void add(BaseFragment fragment) {
+    private void add(NavigationFragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.addToBackStack(null);
@@ -104,9 +104,9 @@ public class BaseActivity extends AppCompatActivity implements NavigationBarView
         updateTopNavigation(true);
     }
 
-    public void open(BaseFragment fragment, View view) {
+    public void open(NavigationFragment fragment, View view) {
         if (view != previousView) {
-            ArrayList<BaseFragment> fragments = map.get(itemId);
+            ArrayList<NavigationFragment> fragments = map.get(itemId);
             fragments.add(fragment);
             add(fragment);
         }
@@ -114,7 +114,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationBarView
     }
 
     private void clearStack() {
-        ArrayList<BaseFragment> fragments = map.get(itemId);
+        ArrayList<NavigationFragment> fragments = map.get(itemId);
         FragmentManager fragmentManager = getSupportFragmentManager();
         for (int i = 0; i < fragments.size(); i++) {
             fragmentManager.popBackStack();
@@ -122,7 +122,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationBarView
     }
 
     private void buildStack() {
-        ArrayList<BaseFragment> fragments = map.get(itemId);
+        ArrayList<NavigationFragment> fragments = map.get(itemId);
         for (int i = 0; i < fragments.size(); i++) {
             if (i == 0) {
                 replace(fragments.get(i));

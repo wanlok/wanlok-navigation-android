@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
-public class B2Fragment extends BaseFragment {
+public class B2Fragment extends NavigationFragment {
     private static final String TAG = B2Fragment.class.getName();
     private B2Presenter presenter;
     private EditText editText;
