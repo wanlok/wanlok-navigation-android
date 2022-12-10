@@ -137,8 +137,8 @@ public class NavigationActivity extends AppCompatActivity implements NavigationB
         FragmentManager fragmentManager = getSupportFragmentManager();
         int itemId = item.getItemId();
         if (fragmentManager.getFragments().size() == 0 || itemId != this.itemId) {
-            this.itemId = itemId;
             clearStack();
+            this.itemId = itemId;
             buildStack();
         }
         return true;
