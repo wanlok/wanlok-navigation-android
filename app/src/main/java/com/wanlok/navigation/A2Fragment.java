@@ -27,7 +27,7 @@ public class A2Fragment extends BaseFragment {
         textView = root.findViewById(R.id.textView);
         button = root.findViewById(R.id.button);
 
-        textView.setText("A2");
+        textView.setText(presenter.getDummy());
 
         button.setText("Next");
         button.setOnClickListener(new View.OnClickListener() {
