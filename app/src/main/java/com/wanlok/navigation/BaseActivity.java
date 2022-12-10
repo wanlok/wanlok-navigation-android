@@ -38,13 +38,16 @@ public class BaseActivity extends AppCompatActivity implements NavigationBarView
     }
 
     private void updateTopNavigation(boolean backButtonEnabled) {
-        getSupportActionBar().setDisplayHomeAsUpEnabled(backButtonEnabled);
-        setTitle(fragments.get(fragments.size() - 1).getTitle());
+        if (fragments.size() > 0) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(backButtonEnabled);
+            setTitle(fragments.get(fragments.size() - 1).getTitle());
+        }
     }
 
     @Override
     public void onBackPressed() {
         fragments.remove(fragments.get(fragments.size() - 1));
+        previousView = null;
         updateTopNavigation(fragments.size() > 1);
         super.onBackPressed();
     }

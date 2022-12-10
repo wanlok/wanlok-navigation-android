@@ -21,18 +21,22 @@ public class A2Fragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_a2, null);
+
         presenter = new A2Presenter(getArguments());
+
         textView = root.findViewById(R.id.textView);
         button = root.findViewById(R.id.button);
+
         textView.setText("A2");
+
         button.setText("Next");
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                BaseActivity baseActivity = (BaseActivity) getActivity();
-                baseActivity.open(new A3Fragment(), button);
+                open(new A3Fragment(), button);
             }
         });
+
         return root;
     }
 }
